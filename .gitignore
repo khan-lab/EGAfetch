@@ -1,0 +1,10 @@
+bin/
+*.exe
+.DS_Store
+creds.json
+bench_results*
+.egafetch
+.claude
+pyega3_output.log
+site/
+EGAFETCH_PROMPT.md

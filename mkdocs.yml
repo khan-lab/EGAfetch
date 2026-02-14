@@ -1,0 +1,63 @@
+site_name: EGAfetch
+site_description: Fast, parallel, resumable downloads from the European Genome-phenome Archive
+site_url: https://khan-lab.github.io/EGAfetch
+repo_url: https://github.com/khan-lab/EGAfetch
+repo_name: khan-lab/EGAfetch
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.copy
+    - search.highlight
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - attr_list
+  - def_list
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Configuration: getting-started/configuration.md
+  - Commands:
+      - Authentication: commands/auth.md
+      - Download: commands/download.md
+      - Metadata: commands/metadata.md
+      - Dataset & File Info: commands/info.md
+      - Management: commands/management.md
+  - How It Works:
+      - Architecture: architecture/overview.md
+      - Resume & Recovery: architecture/resume.md
+  - pyEGA3 Migration: migration.md
