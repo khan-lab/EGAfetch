@@ -1,8 +1,8 @@
 # EGAfetch
 
-Fast, parallel, resumable downloads from the [European Genome-phenome Archive (EGA)](https://ega-archive.org/).
+> **Fast, parallel, resumable data/metadata downloads from the [European Genome-phenome Archive (EGA)](https://ega-archive.org/)**.
 
-EGAfetch is a single-binary CLI tool that replaces [pyEGA3](https://github.com/EGA-archive/ega-download-client) with significantly faster downloads, automatic resume, and robust error handling.
+EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/EGA-archive/ega-download-client) with ~8x faster downloads, automatic resume, and robust error handling.
 
 ## Features
 
@@ -190,20 +190,6 @@ egafetch clean ./data
 
 ## How It Works
 
-### Architecture
-
-```
-CLI (cobra)
-    |
-Orchestrator          -- file-level parallelism (semaphore)
-    |
-FileDownload          -- per-file state machine
-    |
-ChunkDownloader       -- HTTP Range requests + retries
-    |
-Auth Manager          -- auto token refresh
-```
-
 ### File State Machine
 
 Each file progresses through these states:
@@ -261,16 +247,4 @@ The `.egafetch/` directory is removed by `egafetch clean` after downloads comple
 | Installation | pip install | Single binary, zero dependencies |
 | Metadata export | No | TSV/CSV/JSON with master file |
 
-## Building
 
-```bash
-make build       # Build for current platform
-make test        # Run tests with race detector
-make release     # Cross-compile for all platforms
-make install     # Install to $GOPATH/bin
-make clean       # Remove build artifacts
-```
-
-## License
-
-See [LICENSE](LICENSE) for details.
