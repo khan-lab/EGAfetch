@@ -83,16 +83,32 @@ type FileInfo struct {
 	ChecksumType string
 }
 
-// PrintDatasets prints a list of authorized dataset IDs.
-func PrintDatasets(datasets []string) {
+// DatasetSummary holds display information for a dataset.
+type DatasetSummary struct {
+	DatasetID   string
+	Title       string
+	Description string
+	NumSamples  int
+}
+
+// PrintDatasets prints a formatted table of authorized datasets.
+func PrintDatasets(datasets []DatasetSummary) {
 	if len(datasets) == 0 {
 		fmt.Println("No authorized datasets found.")
 		return
 	}
 
 	fmt.Printf("\nAuthorized datasets (%d):\n\n", len(datasets))
-	for _, id := range datasets {
-		fmt.Printf("  %s\n", id)
+	fmt.Printf("%-20s %8s  %s\n", "Dataset ID", "Samples", "Title")
+	fmt.Println(strings.Repeat("-", 90))
+
+	for _, d := range datasets {
+		samples := "-"
+		if d.NumSamples > 0 {
+			samples = fmt.Sprintf("%d", d.NumSamples)
+		}
+		title := truncate(d.Title, 58)
+		fmt.Printf("%-20s %8s  %s\n", d.DatasetID, samples, title)
 	}
 	fmt.Println()
 }

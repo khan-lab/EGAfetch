@@ -83,6 +83,14 @@ type DatasetInfo struct {
 	DatasetID string `json:"datasetId"`
 }
 
+// DatasetDetails holds rich metadata from the EGA public metadata API.
+type DatasetDetails struct {
+	AccessionID string `json:"accession_id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	NumSamples  int    `json:"num_samples"`
+}
+
 // DatasetMetadata holds all mapping data fetched from the EGA metadata API.
 type DatasetMetadata struct {
 	StudyExperimentRunSample []map[string]interface{} `json:"study_experiment_run_sample"`

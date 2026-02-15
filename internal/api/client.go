@@ -128,6 +128,42 @@ func (c *Client) FetchDatasetMappings(ctx context.Context, token, datasetID stri
 	return result, nil
 }
 
+// GetDatasetDetails fetches rich metadata for a dataset from the EGA public
+// metadata API (no authentication required).
+func (c *Client) GetDatasetDetails(ctx context.Context, datasetID string) (*DatasetDetails, error) {
+	url := fmt.Sprintf("https://metadata.ega-archive.org/datasets/%s", datasetID)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("fetch dataset details: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("read response body: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, &APIError{
+			StatusCode: resp.StatusCode,
+			Body:       string(body),
+		}
+	}
+
+	var details DatasetDetails
+	if err := json.Unmarshal(body, &details); err != nil {
+		return nil, fmt.Errorf("parse dataset details: %w", err)
+	}
+	return &details, nil
+}
+
 // doGetWithToken performs a GET request using an explicit Bearer token
 // (for APIs that use a different auth system than the download API).
 func (c *Client) doGetWithToken(ctx context.Context, token, url string) ([]byte, error) {

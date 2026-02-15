@@ -305,9 +305,11 @@ func resolveManifest(ctx context.Context, apiClient *api.Client, args []string, 
 			}
 			for i := range files {
 				checksum, checksumType := files[i].GetChecksum()
+				// Use EGAF accession ID as directory instead of the API path (EGAZ...).
+				outputName := filepath.Join(files[i].FileID, filepath.Base(files[i].FileName))
 				manifest.Files = append(manifest.Files, state.FileSpec{
 					FileID:       files[i].FileID,
-					FileName:     files[i].FileName,
+					FileName:     outputName,
 					Size:         files[i].FileSize - 16, // IV stripped in plain mode
 					Checksum:     checksum,
 					ChecksumType: checksumType,
@@ -321,9 +323,10 @@ func resolveManifest(ctx context.Context, apiClient *api.Client, args []string, 
 				return nil, fmt.Errorf("get metadata for %s: %w", arg, err)
 			}
 			checksum, checksumType := meta.GetChecksum()
+			outputName := filepath.Join(meta.FileID, filepath.Base(meta.FileName))
 			manifest.Files = append(manifest.Files, state.FileSpec{
 				FileID:       meta.FileID,
-				FileName:     meta.FileName,
+				FileName:     outputName,
 				Size:         meta.FileSize - 16, // IV stripped in plain mode
 				Checksum:     checksum,
 				ChecksumType: checksumType,
@@ -388,11 +391,18 @@ func newListCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				ids := make([]string, len(datasets))
+				// Fetch rich details from the public metadata API.
+				summaries := make([]ui.DatasetSummary, len(datasets))
 				for i, d := range datasets {
-					ids[i] = d.DatasetID
+					summaries[i].DatasetID = d.DatasetID
+					details, err := apiClient.GetDatasetDetails(ctx, d.DatasetID)
+					if err == nil {
+						summaries[i].Title = details.Title
+						summaries[i].Description = details.Description
+						summaries[i].NumSamples = details.NumSamples
+					}
 				}
-				ui.PrintDatasets(ids)
+				ui.PrintDatasets(summaries)
 				return nil
 			}
 
