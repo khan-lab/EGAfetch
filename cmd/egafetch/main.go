@@ -191,7 +191,6 @@ func newDownloadCmd() *cobra.Command {
 	var chunkSize string
 	var configFile string
 	var restart bool
-	var format string
 
 	cmd := &cobra.Command{
 		Use:   "download [EGAD.../EGAF...]",
@@ -236,7 +235,7 @@ fresh download from scratch.`,
 			}
 
 			// Resolve args into a manifest.
-			manifest, err := resolveManifest(ctx, apiClient, args, format)
+			manifest, err := resolveManifest(ctx, apiClient, args)
 			if err != nil {
 				return err
 			}
@@ -281,7 +280,6 @@ fresh download from scratch.`,
 	cmd.Flags().IntVar(&parallelChunks, "parallel-chunks", 8, "Number of chunks per file to download in parallel")
 	cmd.Flags().StringVar(&chunkSize, "chunk-size", "64M", "Size of each chunk (e.g., 64M, 128M)")
 	cmd.Flags().BoolVar(&restart, "restart", false, "Force fresh download, removing any existing progress")
-	cmd.Flags().StringVarP(&format, "format", "f", "", "Download only files of this type (e.g., BAM, CRAM, VCF, BCF)")
 	cmd.Flags().StringVar(&configFile, "cf", "", "JSON config file with credentials")
 	cmd.Flags().StringVar(&configFile, "config-file", "", "JSON config file with credentials (alias for --cf)")
 
@@ -289,7 +287,7 @@ fresh download from scratch.`,
 }
 
 // resolveManifest takes CLI args (dataset IDs or file IDs) and builds a manifest.
-func resolveManifest(ctx context.Context, apiClient *api.Client, args []string, format string) (*state.Manifest, error) {
+func resolveManifest(ctx context.Context, apiClient *api.Client, args []string) (*state.Manifest, error) {
 	manifest := &state.Manifest{
 		CreatedAt: time.Now(),
 	}
@@ -338,23 +336,6 @@ func resolveManifest(ctx context.Context, apiClient *api.Client, args []string, 
 
 	if len(manifest.Files) == 0 {
 		return nil, fmt.Errorf("no files found for the given identifiers")
-	}
-
-	// Filter by file format if --format is specified.
-	if format != "" {
-		suffix := "." + strings.ToLower(format)
-		totalBefore := len(manifest.Files)
-		var filtered []state.FileSpec
-		for _, f := range manifest.Files {
-			if strings.HasSuffix(strings.ToLower(f.FileName), suffix) {
-				filtered = append(filtered, f)
-			}
-		}
-		if len(filtered) == 0 {
-			return nil, fmt.Errorf("no files matching format %q found (out of %d total)", strings.ToUpper(format), totalBefore)
-		}
-		fmt.Printf("Filtered to %d of %d files matching format %q\n", len(filtered), totalBefore, strings.ToUpper(format))
-		manifest.Files = filtered
 	}
 
 	return manifest, nil

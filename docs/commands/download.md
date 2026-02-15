@@ -23,9 +23,6 @@ egafetch download EGAD00001001938 -o ./data \
     --parallel-chunks 16 \
     --chunk-size 128M
 
-# Download only BAM files from a dataset
-egafetch download EGAD00001001938 -o ./data -f BAM
-
 # Force a completely fresh download
 egafetch download EGAD00001001938 -o ./data --restart
 
@@ -38,7 +35,6 @@ egafetch download EGAD00001001938 -o ./data --cf credentials.json
 | Flag | Default | Description |
 |------|---------|-------------|
 | `-o, --output` | `.` | Output directory for downloaded files |
-| `-f, --format` | | Download only files of this type (e.g., `BAM`, `CRAM`, `VCF`, `BCF`) |
 | `--parallel-files` | `4` | Number of files downloaded simultaneously |
 | `--parallel-chunks` | `8` | Number of chunks per file downloaded simultaneously |
 | `--chunk-size` | `64M` | Size of each chunk (supports `K`, `M`, `G` suffixes) |
