@@ -1179,14 +1179,11 @@
 <a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span>--parallel-chunks<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
 <a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span>--chunk-size<span class="w"> </span>128M
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Download only BAM files from a dataset</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>-f<span class="w"> </span>BAM
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Force a completely fresh download</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--restart
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Force a completely fresh download</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--restart
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1"># Non-interactive (for scripts / HPC jobs)</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Non-interactive (for scripts / HPC jobs)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
 </code></pre></div>
 <h2 id="flags">Flags<a class="headerlink" href="#flags" title="Permanent link">&para;</a></h2>
 <table>
@@ -1202,11 +1199,6 @@
 <td><code>-o, --output</code></td>
 <td><code>.</code></td>
 <td>Output directory for downloaded files</td>
-</tr>
-<tr>
-<td><code>-f, --format</code></td>
-<td></td>
-<td>Download only files of this type (e.g., <code>BAM</code>, <code>CRAM</code>, <code>VCF</code>, <code>BCF</code>)</td>
 </tr>
 <tr>
 <td><code>--parallel-files</code></td>
