@@ -25,7 +25,7 @@ import (
 	"github.com/khan-lab/EGAfetch/internal/verify"
 )
 
-var version = "1.0.0"
+var version = "1.0.1"
 
 func main() {
 	rootCmd := &cobra.Command{
