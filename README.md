@@ -64,6 +64,33 @@ egafetch download EGAD00001001938 -o ./data
 
 ## Usage
 
+### Help
+
+```bash
+egafetch --help
+
+Usage:
+  egafetch [command]
+
+Available Commands:
+  auth        Manage EGA authentication
+  clean       Remove temp files, keep completed downloads
+  completion  Generate the autocompletion script for the specified shell
+  download    Download datasets or files from EGA
+  help        Help about any command
+  info        Show file metadata
+  list        List authorized datasets, or files in a dataset
+  metadata    Download dataset metadata (TSV, CSV, or JSON)
+  status      Show download progress
+  verify      Re-verify checksums of downloaded files
+
+Flags:
+  -h, --help      help for egafetch
+  -v, --version   version for egafetch
+
+Use "egafetch [command] --help" for more information about a command.
+```
+
 ### Authentication
 
 ```bash
@@ -170,10 +197,10 @@ EGAD00001001938-metadata/
   study_analysis_sample.tsv
   analysis_sample.tsv
   sample_file.tsv
-  EGAD00001001938_master_metadata.tsv
+  EGAD00001001938_merged_metadata.tsv
 ```
 
-The master file merges `study_experiment_run_sample` with `sample_file` on `sample_accession_id`.
+The `_merged_metadata.tsv` file merges individual metadata to create one main metadata file.
 
 ### Management
 
