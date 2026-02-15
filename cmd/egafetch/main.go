@@ -718,15 +718,32 @@ func buildMergedMetadata(meta *api.DatasetMetadata) []map[string]interface{} {
 		}
 	}
 
-	// Start with study_experiment_run_sample as base and merge in sample_file columns.
+	// Pick the first non-empty base table. EGA datasets can follow
+	// the sequencing path (study→experiment→run→sample) or the
+	// analysis path (study→analysis→sample), or both.
+	var base []map[string]interface{}
+	switch {
+	case len(meta.StudyExperimentRunSample) > 0:
+		base = meta.StudyExperimentRunSample
+	case len(meta.StudyAnalysisSample) > 0:
+		base = meta.StudyAnalysisSample
+	case len(meta.AnalysisSample) > 0:
+		base = meta.AnalysisSample
+	case len(meta.SampleFile) > 0:
+		return meta.SampleFile // nothing to merge with
+	default:
+		return nil
+	}
+
+	// Merge base with sample_file on sample_accession_id.
 	var result []map[string]interface{}
-	for _, base := range meta.StudyExperimentRunSample {
+	for _, baseRec := range base {
 		merged := make(map[string]interface{})
-		for k, v := range base {
+		for k, v := range baseRec {
 			merged[k] = v
 		}
 
-		sampleID, _ := base["sample_accession_id"].(string)
+		sampleID, _ := baseRec["sample_accession_id"].(string)
 		if sf, ok := sampleFileMap[sampleID]; ok {
 			for k, v := range sf {
 				// Prefix to avoid collisions with base columns.
