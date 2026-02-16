@@ -1,5 +1,18 @@
 # Installation
 
+## Homebrew (macOS / Linux)
+
+```bash
+brew install khan-lab/tap/egafetch
+```
+
+Or add the tap first:
+
+```bash
+brew tap khan-lab/tap
+brew install egafetch
+```
+
 ## From Source
 
 Requires [Go 1.22+](https://go.dev/dl/).

@@ -21,6 +21,12 @@ EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/
 
 ## Installation
 
+### Homebrew (macOS / Linux)
+
+```bash
+brew install khan-lab/tap/egafetch
+```
+
 ### From source
 
 Requires [Go 1.22+](https://go.dev/dl/).
