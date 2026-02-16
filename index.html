@@ -848,6 +848,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -939,7 +966,13 @@
 <li><strong>Checksum verification</strong> -- MD5/SHA256 verified after every file</li>
 <li><strong>Token auto-refresh</strong> -- OAuth2 tokens refreshed transparently before expiry</li>
 <li><strong>Retry with backoff</strong> -- exponential backoff with jitter on transient failures</li>
-<li><strong>Metadata export</strong> -- download dataset metadata as TSV, CSV, or JSON</li>
+<li><strong>Metadata export</strong> -- download dataset metadata as TSV, CSV, or JSON (auto-fetched during download)</li>
+<li><strong>Bandwidth throttling</strong> -- cap total bandwidth with <code>--max-bandwidth</code> for shared HPC networks</li>
+<li><strong>Config file</strong> -- persist defaults in <code>~/.egafetch/config.yaml</code></li>
+<li><strong>File filtering</strong> -- selectively download with <code>--include</code>/<code>--exclude</code> glob patterns</li>
+<li><strong>Adaptive chunk sizing</strong> -- auto-tune chunk size based on throughput with <code>--adaptive-chunks</code></li>
+<li><strong>Batch file input</strong> -- pass a text file with identifiers (one per line, <code>#</code> comments supported)</li>
+<li><strong>MD5 sidecar files</strong> -- <code>.md5</code> checksum file written alongside each downloaded file</li>
 <li><strong>Single binary</strong> -- no Python, no pip, no dependencies; works on HPC clusters</li>
 </ul>
 <h2 id="quick-example">Quick Example<a class="headerlink" href="#quick-example" title="Permanent link">&para;</a></h2>
@@ -952,8 +985,9 @@
 <a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Interrupted? Just re-run -- it resumes automatically</span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Export metadata as TSV</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>egafetch<span class="w"> </span>metadata<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Metadata is auto-fetched during download (when using --cf)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># Or export independently:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>egafetch<span class="w"> </span>metadata<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
 </code></pre></div>
 <h2 id="at-a-glance">At a Glance<a class="headerlink" href="#at-a-glance" title="Permanent link">&para;</a></h2>
 <table>
@@ -986,14 +1020,44 @@
 <td>Automatic</td>
 </tr>
 <tr>
+<td>Bandwidth throttling</td>
+<td>No</td>
+<td><code>--max-bandwidth</code></td>
+</tr>
+<tr>
+<td>File filtering</td>
+<td>No</td>
+<td><code>--include</code> / <code>--exclude</code> globs</td>
+</tr>
+<tr>
+<td>Adaptive chunks</td>
+<td>No</td>
+<td><code>--adaptive-chunks</code></td>
+</tr>
+<tr>
+<td>Persistent config</td>
+<td>No</td>
+<td><code>~/.egafetch/config.yaml</code></td>
+</tr>
+<tr>
 <td>Installation</td>
 <td><code>pip install</code></td>
 <td>Single binary</td>
 </tr>
 <tr>
+<td>Batch file input</td>
+<td>No</td>
+<td>Text file with identifiers</td>
+</tr>
+<tr>
+<td>MD5 sidecar files</td>
+<td>No</td>
+<td><code>.md5</code> per file</td>
+</tr>
+<tr>
 <td>Metadata export</td>
 <td>No</td>
-<td>TSV / CSV / JSON</td>
+<td>TSV / CSV / JSON (auto during download)</td>
 </tr>
 </tbody>
 </table>

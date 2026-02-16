@@ -802,6 +802,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#input-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#disk-layout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -905,6 +916,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -987,6 +1025,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#input-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Input Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#disk-layout" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1061,19 +1110,21 @@
 <a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    api/
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>      client.go               EGA API client (metadata + download)
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>      types.go                API response types
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    download/
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      orchestrator.go         Parallel file coordination
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>      file.go                 Single file state machine
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      chunk.go                Chunk downloader with retries
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      merge.go                Chunk merging into final file
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    state/
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>      manifest.go             Download manifest management
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>      state.go                Per-file state persistence
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    verify/
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      checksum.go             MD5/SHA256 verification
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    ui/
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>      progress.go             Terminal progress bars
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>      status.go               Status display formatting
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    config/
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>      config.go               Persistent config file (~/.egafetch/config.yaml)
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    download/
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>      orchestrator.go         Parallel file coordination
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>      file.go                 Single file state machine + adaptive sizing
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>      chunk.go                Chunk downloader with retries + throttling
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>      merge.go                Chunk merging into final file
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    state/
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>      manifest.go             Download manifest management
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>      state.go                Per-file state persistence
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    verify/
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>      checksum.go             MD5/SHA256 verification
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    ui/
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>      progress.go             Terminal progress bars
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>      status.go               Status display formatting
 </code></pre></div>
 <h2 id="orchestrator">Orchestrator<a class="headerlink" href="#orchestrator" title="Permanent link">&para;</a></h2>
 <p>The orchestrator manages file-level parallelism using a semaphore pattern:</p>
@@ -1117,11 +1168,11 @@
 </tr>
 <tr>
 <td><code>verifying</code></td>
-<td>Validating checksum (MD5/SHA256)</td>
+<td>Validating checksum (MD5/SHA256) and writing <code>.md5</code> sidecar</td>
 </tr>
 <tr>
 <td><code>complete</code></td>
-<td>Download successful, chunks cleaned up</td>
+<td>Download successful, <code>.md5</code> written, chunks cleaned up</td>
 </tr>
 <tr>
 <td><code>failed</code></td>
@@ -1135,11 +1186,19 @@
 <ol>
 <li>Each chunk is assigned a byte range (<code>start</code> to <code>end</code>)</li>
 <li>An HTTP Range request fetches exactly those bytes</li>
-<li>The response is streamed to a <code>.part</code> file in append mode</li>
-<li>If a <code>.part</code> file already has bytes on disk, the Range header starts from the existing size</li>
+<li>The response is streamed to a <code>.part</code> file</li>
+<li>If a <code>.part</code> file already has bytes on disk, the Range header starts from the existing size (resume)</li>
+<li>If the server returns HTTP 200 instead of 206 (ignoring the Range header), the existing file is truncated to prevent data corruption</li>
 <li>On completion, the chunk state is marked <code>complete</code></li>
 </ol>
 <p><strong>Retry logic:</strong> Up to 5 retries per chunk with exponential backoff (1s base, 60s max) plus random jitter (0-1000ms).</p>
+<h2 id="input-handling">Input Handling<a class="headerlink" href="#input-handling" title="Permanent link">&para;</a></h2>
+<p>CLI arguments are processed through <code>expandArgs</code>, which supports three input types:</p>
+<ul>
+<li><strong>Dataset IDs</strong> (<code>EGAD...</code>) -- expanded via the EGA API into all files in the dataset</li>
+<li><strong>File IDs</strong> (<code>EGAF...</code>) -- fetched individually via the EGA metadata API</li>
+<li><strong>Identifier files</strong> -- any argument not starting with <code>EGAD</code>/<code>EGAF</code> is read as a text file with one identifier per line (blank lines and <code>#</code> comments are ignored)</li>
+</ul>
 <h2 id="disk-layout">Disk Layout<a class="headerlink" href="#disk-layout" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./output-dir/
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    .egafetch/
@@ -1151,8 +1210,11 @@
 <a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>                000.part           Temporary chunk files
 <a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>                001.part
 <a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>                002.part
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    SLX-9630.A006.bwa.bam         Completed files (after merge + verify)
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    EGAF00001104661/
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>        SLX-9630.A006.bwa.bam     Completed file (after merge + verify)
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>        SLX-9630.A006.bwa.bam.md5 MD5 checksum sidecar (standard md5sum format)
 </code></pre></div>
+<p>After each file is downloaded, merged, and verified, an MD5 checksum file is written alongside the output file. This <code>.md5</code> file uses standard <code>md5sum</code> format and can be verified with <code>md5sum -c</code>.</p>
 <p>All JSON state files are written atomically (temp file + fsync + rename) to prevent corruption on crashes.</p>
 <h2 id="authentication-flow">Authentication Flow<a class="headerlink" href="#authentication-flow" title="Permanent link">&para;</a></h2>
 <p>EGAfetch uses two separate OAuth2 Identity Providers:</p>
@@ -1189,6 +1251,14 @@
 <tr>
 <td><code>golang.org/x/term</code></td>
 <td>Hidden password input</td>
+</tr>
+<tr>
+<td><code>golang.org/x/time</code></td>
+<td><code>rate.Limiter</code> for bandwidth throttling</td>
+</tr>
+<tr>
+<td><code>gopkg.in/yaml.v3</code></td>
+<td>YAML config file parsing</td>
 </tr>
 </tbody>
 </table>

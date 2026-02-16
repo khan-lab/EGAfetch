@@ -16,6 +16,8 @@
         <link rel="prev" href="../architecture/resume/">
       
       
+        <link rel="next" href="../changelog/">
+      
       
         
       
@@ -909,6 +911,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -1159,9 +1188,49 @@
 <td><code>egafetch metadata</code> exports TSV/CSV/JSON</td>
 </tr>
 <tr>
+<td><strong>Metadata auto-download</strong></td>
+<td>Not available</td>
+<td>Auto-fetched after dataset download (with <code>--cf</code>)</td>
+</tr>
+<tr>
+<td><strong>Bandwidth throttling</strong></td>
+<td>Not available</td>
+<td><code>--max-bandwidth</code> global limit</td>
+</tr>
+<tr>
+<td><strong>File filtering</strong></td>
+<td>Not available</td>
+<td><code>--include</code> / <code>--exclude</code> glob patterns</td>
+</tr>
+<tr>
+<td><strong>Adaptive chunk sizing</strong></td>
+<td>Not available</td>
+<td><code>--adaptive-chunks</code> auto-tunes based on throughput</td>
+</tr>
+<tr>
+<td><strong>Persistent config</strong></td>
+<td>Not available</td>
+<td><code>~/.egafetch/config.yaml</code> for default settings</td>
+</tr>
+<tr>
 <td><strong>Installation</strong></td>
 <td>Python + pip</td>
 <td>Single binary, zero dependencies</td>
+</tr>
+<tr>
+<td><strong>Batch file input</strong></td>
+<td>Not available</td>
+<td>Text file with identifiers (one per line)</td>
+</tr>
+<tr>
+<td><strong>MD5 sidecar files</strong></td>
+<td>Not available</td>
+<td><code>.md5</code> file written alongside each download</td>
+</tr>
+<tr>
+<td><strong><code>.cip</code> stripping</strong></td>
+<td>Strips <code>.cip</code> extension</td>
+<td>Strips <code>.cip</code> extension (same behavior)</td>
 </tr>
 <tr>
 <td><strong>Checksum</strong></td>
@@ -1179,6 +1248,13 @@
 <li><strong><code>egafetch clean</code></strong> -- Remove temporary files while keeping completed downloads</li>
 <li><strong><code>--restart</code></strong> -- Force a fresh download, discarding all progress</li>
 <li><strong><code>--parallel-files</code> / <code>--parallel-chunks</code> / <code>--chunk-size</code></strong> -- Fine-grained control over download parallelism</li>
+<li><strong><code>--max-bandwidth</code></strong> -- Global bandwidth throttling (e.g., <code>100M</code>, <code>1G</code>)</li>
+<li><strong><code>--include</code> / <code>--exclude</code></strong> -- Glob-based file filtering (e.g., <code>--include "*.bam"</code>)</li>
+<li><strong><code>--adaptive-chunks</code></strong> -- Auto-adjust chunk sizes based on measured throughput</li>
+<li><strong><code>--no-metadata</code> / <code>--metadata-format</code></strong> -- Control automatic metadata download during dataset downloads</li>
+<li><strong><code>~/.egafetch/config.yaml</code></strong> -- Persistent config file for default settings (chunk size, parallelism, bandwidth, output dir)</li>
+<li><strong>Identifier files</strong> -- Pass a text file with one EGAD/EGAF per line instead of listing IDs on the command line</li>
+<li><strong>MD5 sidecar files</strong> -- <code>.md5</code> checksum file written alongside each downloaded file for easy verification</li>
 </ul>
 
 

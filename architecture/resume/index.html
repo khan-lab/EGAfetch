@@ -819,6 +819,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#server-response-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Response Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -897,6 +908,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#md5-checksum-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MD5 Checksum Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#idempotency" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -938,6 +960,33 @@
     
   
     pyEGA3 Migration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
   
 
     
@@ -1021,6 +1070,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#server-response-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Server Response Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1099,6 +1159,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#md5-checksum-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MD5 Checksum Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#idempotency" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1153,6 +1224,8 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Range: bytes=1048576-2097151
 </code></pre></div>
 <p>The <code>.part</code> file is opened in append mode (<code>O_APPEND</code>), so new bytes are added after existing content.</p>
+<h3 id="server-response-handling">Server Response Handling<a class="headerlink" href="#server-response-handling" title="Permanent link">&para;</a></h3>
+<p>When resuming a partial chunk, the server should respond with HTTP 206 (Partial Content). However, some servers may ignore the <code>Range</code> header and return HTTP 200 (OK) with the full content. EGAfetch detects this case and automatically truncates the existing <code>.part</code> file before writing, preventing data corruption from appending full content to partial data.</p>
 <h2 id="state-persistence">State Persistence<a class="headerlink" href="#state-persistence" title="Permanent link">&para;</a></h2>
 <p>State is saved to disk at critical points:</p>
 <table>
@@ -1213,10 +1286,12 @@
 <p class="admonition-title">Warning</p>
 <p><code>--restart</code> deletes all download state including partial chunks. Completed files in the output directory are <strong>not</strong> deleted, but they will be re-downloaded and overwritten.</p>
 </div>
+<h2 id="md5-checksum-files">MD5 Checksum Files<a class="headerlink" href="#md5-checksum-files" title="Permanent link">&para;</a></h2>
+<p>After a file passes verification, EGAfetch computes its MD5 checksum and writes a <code>.md5</code> sidecar file alongside the output file. This file uses standard <code>md5sum</code> format and is generated regardless of whether the EGA API provided a checksum. On resume, if the file is already in the <code>complete</code> state (with its <code>.md5</code> file already written), it is skipped entirely.</p>
 <h2 id="idempotency">Idempotency<a class="headerlink" href="#idempotency" title="Permanent link">&para;</a></h2>
 <p>Running the same download command multiple times is idempotent:</p>
 <ul>
-<li>Complete files are skipped</li>
+<li>Complete files are skipped (including their <code>.md5</code> sidecar files)</li>
 <li>The manifest is overwritten with the same content</li>
 <li>No data is duplicated or corrupted</li>
 <li>Checksums are verified before marking any file complete</li>

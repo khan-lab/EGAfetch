@@ -674,6 +674,83 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#bandwidth-throttling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bandwidth Throttling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-chunk-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Chunk Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metadata-during-download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metadata During Download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identifier-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifier Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-file-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output File Names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#md5-checksum-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MD5 Checksum Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#recommended-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -966,6 +1043,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -1093,6 +1197,83 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#bandwidth-throttling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bandwidth Throttling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptive-chunk-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adaptive Chunk Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Filtering
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metadata-during-download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metadata During Download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#identifier-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identifier Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output-file-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Output File Names
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#md5-checksum-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MD5 Checksum Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#recommended-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1164,8 +1345,9 @@
 <h1 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h1>
 <p>Download datasets or individual files from EGA with parallel chunked downloads and automatic resume.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span><span class="o">[</span>EGAD.../EGAF...<span class="o">]</span><span class="w"> </span><span class="o">[</span>flags<span class="o">]</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span><span class="o">[</span>EGAD.../EGAF.../file.txt<span class="o">]</span><span class="w"> </span><span class="o">[</span>flags<span class="o">]</span>
 </code></pre></div>
+<p>Arguments can be dataset IDs (<code>EGAD...</code>), file IDs (<code>EGAF...</code>), or text files containing one identifier per line. See <a href="#identifier-files">Identifier Files</a> below.</p>
 <h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Download all files in a dataset</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data
@@ -1173,17 +1355,34 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Download specific files</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAF00001104661<span class="w"> </span>EGAF00001104662<span class="w"> </span>-o<span class="w"> </span>./data
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Tune parallelism for fast networks</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span>--parallel-files<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span>--parallel-chunks<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span>--chunk-size<span class="w"> </span>128M
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Download from a list of identifiers in a text file</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>egafetch<span class="w"> </span>download<span class="w"> </span>identifiers.txt<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Mix direct IDs and identifier files</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAF00000009999<span class="w"> </span>identifiers.txt<span class="w"> </span>-o<span class="w"> </span>./data
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Force a completely fresh download</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--restart
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Non-interactive (for scripts / HPC jobs)</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Tune parallelism for fast networks</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span>--parallel-files<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span>--parallel-chunks<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span>--chunk-size<span class="w"> </span>128M
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1"># Limit bandwidth on shared HPC networks</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--max-bandwidth<span class="w"> </span>100M
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="c1"># Download only BAM files, excluding unmapped</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">    </span>--include<span class="w"> </span><span class="s2">&quot;*.bam&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">    </span>--exclude<span class="w"> </span><span class="s2">&quot;*_unmapped*&quot;</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="c1"># Auto-tune chunk sizes based on connection speed</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--adaptive-chunks
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="c1"># Force a completely fresh download</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--restart
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="c1"># Non-interactive (for scripts / HPC jobs)</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
 </code></pre></div>
 <h2 id="flags">Flags<a class="headerlink" href="#flags" title="Permanent link">&para;</a></h2>
 <table>
@@ -1214,6 +1413,36 @@
 <td><code>--chunk-size</code></td>
 <td><code>64M</code></td>
 <td>Size of each chunk (supports <code>K</code>, <code>M</code>, <code>G</code> suffixes)</td>
+</tr>
+<tr>
+<td><code>--max-bandwidth</code></td>
+<td></td>
+<td>Global bandwidth limit (e.g., <code>100M</code>, <code>1G</code>)</td>
+</tr>
+<tr>
+<td><code>--include</code></td>
+<td></td>
+<td>Glob patterns to include (matched against file name)</td>
+</tr>
+<tr>
+<td><code>--exclude</code></td>
+<td></td>
+<td>Glob patterns to exclude (matched against file name)</td>
+</tr>
+<tr>
+<td><code>--adaptive-chunks</code></td>
+<td><code>false</code></td>
+<td>Auto-adjust chunk size based on throughput</td>
+</tr>
+<tr>
+<td><code>--no-metadata</code></td>
+<td><code>false</code></td>
+<td>Skip downloading dataset metadata</td>
+</tr>
+<tr>
+<td><code>--metadata-format</code></td>
+<td><code>tsv</code></td>
+<td>Metadata output format (<code>tsv</code>, <code>csv</code>, <code>json</code>)</td>
 </tr>
 <tr>
 <td><code>--restart</code></td>
@@ -1261,6 +1490,86 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>--chunk-size<span class="w"> </span>128M<span class="w">   </span><span class="c1"># Good for fast, stable connections</span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>--chunk-size<span class="w"> </span>32M<span class="w">    </span><span class="c1"># Good for unstable connections (finer resume)</span>
 </code></pre></div>
+<h3 id="bandwidth-throttling">Bandwidth Throttling<a class="headerlink" href="#bandwidth-throttling" title="Permanent link">&para;</a></h3>
+<p>Cap the total download bandwidth across all parallel connections. Useful on shared HPC networks where you should not saturate the link:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>--max-bandwidth<span class="w"> </span>100M<span class="w">   </span><span class="c1"># Limit to 100 MB/s total</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>--max-bandwidth<span class="w"> </span>1G<span class="w">     </span><span class="c1"># Limit to 1 GB/s total</span>
+</code></pre></div>
+<p>The limit is enforced globally -- all files and chunks share the same bandwidth pool.</p>
+<h3 id="adaptive-chunk-sizing">Adaptive Chunk Sizing<a class="headerlink" href="#adaptive-chunk-sizing" title="Permanent link">&para;</a></h3>
+<p>When enabled, EGAfetch monitors download throughput and automatically adjusts chunk sizes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--adaptive-chunks
+</code></pre></div>
+<ul>
+<li>Chunks start at the default size (64 MB or <code>--chunk-size</code> value)</li>
+<li>Throughput is measured over a rolling window of 3 chunks</li>
+<li><strong>Fast connections</strong> (&gt; 50 MB/s avg): chunk size scaled up by 1.5x (max 256 MB)</li>
+<li><strong>Slow connections</strong> (&lt; 10 MB/s avg): chunk size scaled down by 0.5x (min 8 MB)</li>
+</ul>
+<p>This is useful when you don't know the network speed in advance. Larger chunks reduce HTTP overhead on fast links, while smaller chunks reduce wasted work on failures with slow links.</p>
+<h3 id="file-filtering">File Filtering<a class="headerlink" href="#file-filtering" title="Permanent link">&para;</a></h3>
+<p>Selectively download files from a dataset using glob patterns:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Only BAM files</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--include<span class="w"> </span><span class="s2">&quot;*.bam&quot;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Everything except encrypted files</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--exclude<span class="w"> </span><span class="s2">&quot;*.cip&quot;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Combine: only BAM files, but not unmapped ones</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">    </span>--include<span class="w"> </span><span class="s2">&quot;*.bam&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">    </span>--exclude<span class="w"> </span><span class="s2">&quot;*_unmapped*&quot;</span>
+</code></pre></div>
+<ul>
+<li>Patterns are matched against the <strong>file name</strong> only (not the full path)</li>
+<li>Uses Go's <code>filepath.Match</code> syntax (<code>*</code>, <code>?</code>, <code>[...]</code>)</li>
+<li><code>--include</code>: file must match <strong>at least one</strong> include pattern</li>
+<li><code>--exclude</code>: file is skipped if it matches <strong>any</strong> exclude pattern</li>
+<li>Explicitly named EGAF file IDs are never filtered out</li>
+<li>Multiple patterns can be specified by repeating the flag</li>
+</ul>
+<h3 id="metadata-during-download">Metadata During Download<a class="headerlink" href="#metadata-during-download" title="Permanent link">&para;</a></h3>
+<p>When downloading a dataset (EGAD) with <code>--cf</code>, metadata is fetched automatically after the data download completes. Use <code>--no-metadata</code> to skip, or <code>--metadata-format</code> to choose the format:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Download data + metadata as TSV (default)</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>creds.json
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Download data + metadata as JSON</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>creds.json<span class="w"> </span>--metadata-format<span class="w"> </span>json
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># Download data only, skip metadata</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>creds.json<span class="w"> </span>--no-metadata
+</code></pre></div>
+<p>Metadata files are saved to <code>{output}/{datasetID}-metadata/</code>. If metadata auth fails, the data download still succeeds with a warning.</p>
+<h3 id="identifier-files">Identifier Files<a class="headerlink" href="#identifier-files" title="Permanent link">&para;</a></h3>
+<p>Any argument that does not start with <code>EGAD</code> or <code>EGAF</code> is treated as a text file containing identifiers, one per line. This is useful for batch downloads from curated lists:</p>
+<div class="highlight"><span class="filename">identifiers.txt</span><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a># WGS samples from project X
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>EGAD00001002071
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a># Additional individual files
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>EGAF00000001234
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>EGAF00000005678
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>identifiers.txt<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+</code></pre></div>
+<ul>
+<li>Blank lines and lines starting with <code>#</code> are ignored</li>
+<li>Mixed <code>EGAD</code> and <code>EGAF</code> identifiers are allowed in the same file</li>
+<li>You can combine identifier files with direct IDs on the command line</li>
+<li>Errors include the filename and line number for easy debugging</li>
+</ul>
+<h3 id="output-file-names">Output File Names<a class="headerlink" href="#output-file-names" title="Permanent link">&para;</a></h3>
+<p>EGA stores files in encrypted <code>.cip</code> format. When downloading in plain (decrypted) mode (the default), EGAfetch automatically strips the <code>.cip</code> extension from output file names. For example, <code>sample.bam.cip</code> on the EGA server becomes <code>sample.bam</code> in your output directory.</p>
+<h3 id="md5-checksum-files">MD5 Checksum Files<a class="headerlink" href="#md5-checksum-files" title="Permanent link">&para;</a></h3>
+<p>After each file is downloaded and verified, EGAfetch writes an MD5 checksum sidecar file alongside the downloaded file. For example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>output-dir/
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>    EGAF00001104661/
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>        SLX-9630.A006.bwa.bam       # Downloaded file
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>        SLX-9630.A006.bwa.bam.md5   # MD5 checksum file
+</code></pre></div>
+<p>The <code>.md5</code> file uses standard <code>md5sum</code> format:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>a1b2c3d4e5f6...  SLX-9630.A006.bwa.bam
+</code></pre></div>
+<p>This allows verification with standard tools: <code>cd output-dir/EGAF00001104661 &amp;&amp; md5sum -c SLX-9630.A006.bwa.bam.md5</code>.</p>
 <h3 id="recommended-settings">Recommended Settings<a class="headerlink" href="#recommended-settings" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1275,8 +1584,16 @@
 <td><code>--parallel-files 8 --parallel-chunks 16 --chunk-size 128M</code></td>
 </tr>
 <tr>
+<td>HPC with shared link</td>
+<td><code>--parallel-files 4 --max-bandwidth 500M</code></td>
+</tr>
+<tr>
 <td>Laptop on WiFi</td>
 <td><code>--parallel-files 2 --parallel-chunks 4 --chunk-size 32M</code></td>
+</tr>
+<tr>
+<td>Unknown network</td>
+<td><code>--adaptive-chunks</code></td>
 </tr>
 <tr>
 <td>Many small files</td>
@@ -1286,15 +1603,19 @@
 <td>Few large files</td>
 <td><code>--parallel-files 2 --parallel-chunks 16 --chunk-size 128M</code></td>
 </tr>
+<tr>
+<td>Only BAM files</td>
+<td><code>--include "*.bam"</code></td>
+</tr>
 </tbody>
 </table>
 <h2 id="progress-output">Progress Output<a class="headerlink" href="#progress-output" title="Permanent link">&para;</a></h2>
 <p>During download, a live progress display shows the state of each file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Downloading 60 file(s) to ./data
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>  SLX-9630.A006.bwa.bam  [========&gt;         ] 45%  225.0 MB / 500.0 MB
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>  SLX-9630.A007.bwa.bam  [==============&gt;   ] 72%  230.4 MB / 320.0 MB
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  SLX-9631.A001.bwa.bam  [=&gt;                ]  8%   12.0 MB / 150.0 MB
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  SLX-9631.A002.bwa.bam  [waiting...]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Downloading 60 file(s) to ./data
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>  SLX-9630.A006.bwa.bam  [========&gt;         ] 45%  225.0 MB / 500.0 MB
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>  SLX-9630.A007.bwa.bam  [==============&gt;   ] 72%  230.4 MB / 320.0 MB
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>  SLX-9631.A001.bwa.bam  [=&gt;                ]  8%   12.0 MB / 150.0 MB
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>  SLX-9631.A002.bwa.bam  [waiting...]
 </code></pre></div>
 <p>Status indicators:</p>
 <table>

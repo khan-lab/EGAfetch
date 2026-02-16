@@ -916,6 +916,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -1114,30 +1141,33 @@
 <p>Or download specific files:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAF00001104661<span class="w"> </span>EGAF00001104662<span class="w"> </span>-o<span class="w"> </span>./my-data
 </code></pre></div>
+<p>Or download from a text file with identifiers (one per line, <code>#</code> comments allowed):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>identifiers.txt<span class="w"> </span>-o<span class="w"> </span>./my-data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+</code></pre></div>
 <p>You will see live progress for each file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Downloading 60 file(s) to ./my-data
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>  SLX-9630.A006.bwa.bam  [========&gt;         ] 45%  225.0 MB / 500.0 MB
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>  SLX-9630.A007.bwa.bam  [====&gt;             ] 22%   70.4 MB / 320.0 MB
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>  SLX-9631.A001.bwa.bam  [waiting...]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Downloading 60 file(s) to ./my-data
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>  SLX-9630.A006.bwa.bam  [========&gt;         ] 45%  225.0 MB / 500.0 MB
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>  SLX-9630.A007.bwa.bam  [====&gt;             ] 22%   70.4 MB / 320.0 MB
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>  SLX-9631.A001.bwa.bam  [waiting...]
 </code></pre></div>
 <h2 id="step-4-resume-if-interrupted">Step 4: Resume (If Interrupted)<a class="headerlink" href="#step-4-resume-if-interrupted" title="Permanent link">&para;</a></h2>
 <p>If the download is interrupted (Ctrl+C, network failure, etc.), simply re-run the same command:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./my-data
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./my-data
 </code></pre></div>
 <p>Completed files are skipped, partial files resume from the last byte.</p>
 <h2 id="step-5-verify">Step 5: Verify<a class="headerlink" href="#step-5-verify" title="Permanent link">&para;</a></h2>
 <p>Re-verify checksums of all completed files:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>egafetch<span class="w"> </span>verify<span class="w"> </span>./my-data
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>egafetch<span class="w"> </span>verify<span class="w"> </span>./my-data
 </code></pre></div>
 <h2 id="step-6-clean-up">Step 6: Clean Up<a class="headerlink" href="#step-6-clean-up" title="Permanent link">&para;</a></h2>
 <p>Remove temporary chunk files (keeps your completed downloads):</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>egafetch<span class="w"> </span>clean<span class="w"> </span>./my-data
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>egafetch<span class="w"> </span>clean<span class="w"> </span>./my-data
 </code></pre></div>
 <h2 id="using-a-config-file-everywhere">Using a Config File Everywhere<a class="headerlink" href="#using-a-config-file-everywhere" title="Permanent link">&para;</a></h2>
 <p>Pass <code>--cf</code> to any command to skip interactive login:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
-<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>egafetch<span class="w"> </span>list<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
-<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>egafetch<span class="w"> </span>metadata<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>egafetch<span class="w"> </span>download<span class="w"> </span>EGAD00001001938<span class="w"> </span>-o<span class="w"> </span>./data<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>egafetch<span class="w"> </span>list<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>egafetch<span class="w"> </span>metadata<span class="w"> </span>EGAD00001001938<span class="w"> </span>--cf<span class="w"> </span>credentials.json
 </code></pre></div>
 <p>This is especially useful for scripts and batch jobs on HPC clusters.</p>
 <h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
