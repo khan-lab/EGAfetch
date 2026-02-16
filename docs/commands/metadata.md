@@ -2,6 +2,9 @@
 
 Download dataset metadata from the EGA Private Metadata API and export as TSV, CSV, or JSON.
 
+!!! tip "Auto-download during `egafetch download`"
+    When downloading a dataset with `--cf`, metadata is fetched automatically after the data download completes. You only need the standalone `metadata` command if you want metadata without downloading files, or need to re-fetch metadata separately.
+
 ## Usage
 
 ```bash

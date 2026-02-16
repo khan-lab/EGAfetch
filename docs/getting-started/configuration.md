@@ -1,5 +1,35 @@
 # Configuration
 
+## Config File
+
+Persist default download settings in `~/.egafetch/config.yaml` so you don't have to repeat flags every time. CLI flags always override config file values.
+
+```yaml title="~/.egafetch/config.yaml"
+chunk_size: 128M
+parallel_files: 4
+parallel_chunks: 8
+max_bandwidth: 500M
+output_dir: /data/ega
+metadata_format: tsv
+```
+
+All fields are optional. If the file doesn't exist, hardcoded defaults are used. The precedence is:
+
+1. **CLI flags** (highest priority)
+2. **Config file** (`~/.egafetch/config.yaml`)
+3. **Hardcoded defaults** (lowest priority)
+
+### Available Settings
+
+| Setting | Equivalent Flag | Default | Description |
+|---------|----------------|---------|-------------|
+| `chunk_size` | `--chunk-size` | `64M` | Size of each download chunk |
+| `parallel_files` | `--parallel-files` | `4` | Files downloaded simultaneously |
+| `parallel_chunks` | `--parallel-chunks` | `8` | Chunks per file downloaded simultaneously |
+| `max_bandwidth` | `--max-bandwidth` | | Global bandwidth limit |
+| `output_dir` | `-o, --output` | `.` | Default output directory |
+| `metadata_format` | `--metadata-format` | `tsv` | Default metadata format |
+
 ## Credentials File
 
 EGAfetch supports a JSON config file compatible with pyEGA3's `-cf` format:

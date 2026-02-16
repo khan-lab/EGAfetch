@@ -7,9 +7,12 @@ import (
 	"io"
 	"math/rand"
 	"net"
+	"net/http"
 	"os"
 	"path/filepath"
 	"time"
+
+	"golang.org/x/time/rate"
 
 	"github.com/khan-lab/EGAfetch/internal/api"
 	"github.com/khan-lab/EGAfetch/internal/state"
@@ -30,15 +33,17 @@ type ChunkDownloader struct {
 	downloadURL    string
 	chunksDir      string
 	onBytesWritten BytesWrittenCallback
+	limiter        *rate.Limiter // nil = no throttling
 }
 
 // NewChunkDownloader creates a chunk downloader for the given file.
-func NewChunkDownloader(apiClient *api.Client, downloadURL string, chunksDir string, onBytes BytesWrittenCallback) *ChunkDownloader {
+func NewChunkDownloader(apiClient *api.Client, downloadURL string, chunksDir string, onBytes BytesWrittenCallback, limiter *rate.Limiter) *ChunkDownloader {
 	return &ChunkDownloader{
 		apiClient:      apiClient,
 		downloadURL:    downloadURL,
 		chunksDir:      chunksDir,
 		onBytesWritten: onBytes,
+		limiter:        limiter,
 	}
 }
 
@@ -126,13 +131,27 @@ func (d *ChunkDownloader) attemptDownload(ctx context.Context, chunk *state.Chun
 	}
 	defer resp.Body.Close()
 
+	// If we requested a Range but the server returned 200 (not 206 Partial Content),
+	// the server ignored the Range header and is sending the full content.
+	// We must truncate the existing file to avoid appending full content to partial data.
+	if existingSize > 0 && resp.StatusCode == http.StatusOK {
+		existingSize = 0
+		chunk.BytesDownloaded = 0
+	}
+
 	// Ensure chunks directory exists.
 	if err := os.MkdirAll(filepath.Dir(chunkPath), 0755); err != nil {
 		return fmt.Errorf("create chunk directory: %w", err)
 	}
 
-	// Open file in append mode for resume.
-	f, err := os.OpenFile(chunkPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// Open file: truncate if server ignored Range header, otherwise append for resume.
+	openFlags := os.O_CREATE | os.O_WRONLY
+	if resp.StatusCode == http.StatusOK {
+		openFlags |= os.O_TRUNC
+	} else {
+		openFlags |= os.O_APPEND
+	}
+	f, err := os.OpenFile(chunkPath, openFlags, 0644)
 	if err != nil {
 		return err
 	}
@@ -147,6 +166,11 @@ func (d *ChunkDownloader) attemptDownload(ctx context.Context, chunk *state.Chun
 			nw, writeErr := f.Write(buf[:nr])
 			if writeErr != nil {
 				return writeErr
+			}
+			if d.limiter != nil {
+				if err := d.limiter.WaitN(ctx, nw); err != nil {
+					return err
+				}
 			}
 			written += int64(nw)
 			chunk.BytesDownloaded = existingSize + written

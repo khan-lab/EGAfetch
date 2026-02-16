@@ -89,7 +89,15 @@ The only difference is the flag name: pyEGA3 uses `-cf`, EGAfetch uses `--cf` (d
 | **Progress** | Basic text output | Live progress bars per file |
 | **Interruption** | May corrupt state | Safe at any point (atomic state writes) |
 | **Metadata** | Not available | `egafetch metadata` exports TSV/CSV/JSON |
+| **Metadata auto-download** | Not available | Auto-fetched after dataset download (with `--cf`) |
+| **Bandwidth throttling** | Not available | `--max-bandwidth` global limit |
+| **File filtering** | Not available | `--include` / `--exclude` glob patterns |
+| **Adaptive chunk sizing** | Not available | `--adaptive-chunks` auto-tunes based on throughput |
+| **Persistent config** | Not available | `~/.egafetch/config.yaml` for default settings |
 | **Installation** | Python + pip | Single binary, zero dependencies |
+| **Batch file input** | Not available | Text file with identifiers (one per line) |
+| **MD5 sidecar files** | Not available | `.md5` file written alongside each download |
+| **`.cip` stripping** | Strips `.cip` extension | Strips `.cip` extension (same behavior) |
 | **Checksum** | After download | After download (same, but automatic) |
 
 ## New Features in EGAfetch
@@ -102,3 +110,10 @@ Features not available in pyEGA3:
 - **`egafetch clean`** -- Remove temporary files while keeping completed downloads
 - **`--restart`** -- Force a fresh download, discarding all progress
 - **`--parallel-files` / `--parallel-chunks` / `--chunk-size`** -- Fine-grained control over download parallelism
+- **`--max-bandwidth`** -- Global bandwidth throttling (e.g., `100M`, `1G`)
+- **`--include` / `--exclude`** -- Glob-based file filtering (e.g., `--include "*.bam"`)
+- **`--adaptive-chunks`** -- Auto-adjust chunk sizes based on measured throughput
+- **`--no-metadata` / `--metadata-format`** -- Control automatic metadata download during dataset downloads
+- **`~/.egafetch/config.yaml`** -- Persistent config file for default settings (chunk size, parallelism, bandwidth, output dir)
+- **Identifier files** -- Pass a text file with one EGAD/EGAF per line instead of listing IDs on the command line
+- **MD5 sidecar files** -- `.md5` checksum file written alongside each downloaded file for easy verification

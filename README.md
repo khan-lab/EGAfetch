@@ -12,6 +12,10 @@ EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/
 - **Token auto-refresh** -- OAuth2 tokens refreshed transparently before expiry
 - **Retry with backoff** -- exponential backoff with jitter on transient failures (network errors, 5xx, 429)
 - **Metadata export** -- download dataset metadata as TSV, CSV, or JSON with a merged master file
+- **Bandwidth throttling** -- cap total bandwidth with `--max-bandwidth` to avoid saturating shared network links
+- **Config file** -- persist defaults in `~/.egafetch/config.yaml` so you don't repeat flags every time
+- **File filtering** -- selectively download files with `--include`/`--exclude` glob patterns
+- **Adaptive chunk sizing** -- auto-tune chunk size based on observed throughput with `--adaptive-chunks`
 - **pyEGA3-compatible config** -- same `{"username":"...","password":"..."}` JSON config file format
 - **Single binary** -- no Python, no pip, no dependencies; works on HPC clusters
 
@@ -109,7 +113,7 @@ egafetch auth logout
 
 Credentials are stored in `~/.egafetch/credentials.json` with `0600` permissions. Tokens auto-refresh before expiry.
 
-**Config file format** (same as pyEGA3):
+**Credentials file format** (same as pyEGA3):
 
 ```json
 {
@@ -117,6 +121,21 @@ Credentials are stored in `~/.egafetch/credentials.json` with `0600` permissions
   "password": "your_password"
 }
 ```
+
+### Config File
+
+Persist default settings in `~/.egafetch/config.yaml` to avoid repeating flags. CLI flags always override config values.
+
+```yaml
+chunk_size: 128M
+parallel_files: 4
+parallel_chunks: 8
+max_bandwidth: 500M
+output_dir: /data/ega
+metadata_format: tsv
+```
+
+All fields are optional. If the file doesn't exist, hardcoded defaults are used.
 
 ### Downloading
 
@@ -133,6 +152,17 @@ egafetch download EGAD00001001938 -o ./data \
     --parallel-chunks 16 \
     --chunk-size 128M
 
+# Limit bandwidth (useful on shared HPC networks)
+egafetch download EGAD00001001938 -o ./data --max-bandwidth 100M
+
+# Download only BAM files, excluding unmapped
+egafetch download EGAD00001001938 -o ./data \
+    --include "*.bam" \
+    --exclude "*_unmapped*"
+
+# Auto-tune chunk sizes based on connection speed
+egafetch download EGAD00001001938 -o ./data --adaptive-chunks
+
 # Force a fresh start (discard all progress)
 egafetch download EGAD00001001938 -o ./data --restart
 
@@ -148,6 +178,12 @@ egafetch download EGAD00001001938 -o ./data --cf credentials.json
 | `--parallel-files` | `4` | Files downloaded simultaneously |
 | `--parallel-chunks` | `8` | Chunks per file downloaded simultaneously |
 | `--chunk-size` | `64M` | Chunk size (supports K, M, G suffixes) |
+| `--max-bandwidth` | | Global bandwidth limit (e.g., `100M`, `1G`) |
+| `--include` | | Glob patterns to include (matched against file name) |
+| `--exclude` | | Glob patterns to exclude (matched against file name) |
+| `--adaptive-chunks` | `false` | Auto-adjust chunk size based on throughput |
+| `--no-metadata` | `false` | Skip downloading dataset metadata |
+| `--metadata-format` | `tsv` | Metadata output format (tsv, csv, json) |
 | `--restart` | `false` | Wipe existing progress and start fresh |
 | `--cf, --config-file` | | JSON config file with credentials |
 
@@ -168,7 +204,9 @@ egafetch info EGAF00001104661
 
 ### Metadata Export
 
-Download dataset metadata from the EGA Private Metadata API and export as TSV, CSV, or JSON.
+Dataset metadata is **downloaded automatically** when using `egafetch download` with a `--cf` config file. Use `--no-metadata` to skip, or `--metadata-format` to choose the format.
+
+You can also download metadata independently:
 
 ```bash
 # Export as TSV (default)
@@ -266,8 +304,12 @@ The `.egafetch/` directory is removed by `egafetch clean` after downloads comple
 | Parallel chunks | 1 | Configurable (default 8) |
 | Resume | Limited | Full (chunk-level, byte-precise) |
 | Token refresh | Manual | Automatic |
+| Bandwidth throttling | No | `--max-bandwidth` flag |
+| File filtering | No | `--include`/`--exclude` glob patterns |
+| Adaptive chunk sizing | No | `--adaptive-chunks` auto-tunes |
+| Persistent config | No | `~/.egafetch/config.yaml` |
 | Config file | `-cf credentials.json` | `--cf credentials.json` (compatible format) |
 | Installation | pip install | Single binary, zero dependencies |
-| Metadata export | No | TSV/CSV/JSON with master file |
+| Metadata export | No | TSV/CSV/JSON with master file (auto during download) |
 
 

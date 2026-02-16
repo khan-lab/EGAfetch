@@ -76,6 +76,12 @@ Or download specific files:
 egafetch download EGAF00001104661 EGAF00001104662 -o ./my-data
 ```
 
+Or download from a text file with identifiers (one per line, `#` comments allowed):
+
+```bash
+egafetch download identifiers.txt -o ./my-data --cf credentials.json
+```
+
 You will see live progress for each file:
 
 ```

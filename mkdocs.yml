@@ -61,3 +61,4 @@ nav:
       - Architecture: architecture/overview.md
       - Resume & Recovery: architecture/resume.md
   - pyEGA3 Migration: migration.md
+  - Changelog: changelog.md

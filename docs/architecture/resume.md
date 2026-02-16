@@ -34,6 +34,10 @@ Range: bytes=1048576-2097151
 
 The `.part` file is opened in append mode (`O_APPEND`), so new bytes are added after existing content.
 
+### Server Response Handling
+
+When resuming a partial chunk, the server should respond with HTTP 206 (Partial Content). However, some servers may ignore the `Range` header and return HTTP 200 (OK) with the full content. EGAfetch detects this case and automatically truncates the existing `.part` file before writing, preventing data corruption from appending full content to partial data.
+
 ## State Persistence
 
 State is saved to disk at critical points:
@@ -89,11 +93,15 @@ egafetch download EGAD00001001938 -o ./data --restart
 !!! warning
     `--restart` deletes all download state including partial chunks. Completed files in the output directory are **not** deleted, but they will be re-downloaded and overwritten.
 
+## MD5 Checksum Files
+
+After a file passes verification, EGAfetch computes its MD5 checksum and writes a `.md5` sidecar file alongside the output file. This file uses standard `md5sum` format and is generated regardless of whether the EGA API provided a checksum. On resume, if the file is already in the `complete` state (with its `.md5` file already written), it is skipped entirely.
+
 ## Idempotency
 
 Running the same download command multiple times is idempotent:
 
-- Complete files are skipped
+- Complete files are skipped (including their `.md5` sidecar files)
 - The manifest is overwritten with the same content
 - No data is duplicated or corrupted
 - Checksums are verified before marking any file complete

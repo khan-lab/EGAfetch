@@ -18,12 +18,11 @@ type FileMetadata struct {
 // The EGA API may return the checksum under different field names depending on
 // the API version (plainChecksum for v2, unencryptedChecksum for v1).
 func (f *FileMetadata) GetChecksum() (value string, checksumType string) {
+	// Only use plain/unencrypted checksums — the encrypted file's Checksum
+	// field does not match content downloaded in plain (decrypted) mode.
 	cs := f.PlainChecksum
 	if cs == "" {
 		cs = f.UnencryptedChecksum
-	}
-	if cs == "" {
-		cs = f.Checksum
 	}
 	if cs == "" {
 		return "", ""
@@ -55,12 +54,11 @@ type DatasetFile struct {
 
 // GetChecksum returns the best available checksum value and its inferred type.
 func (f *DatasetFile) GetChecksum() (value string, checksumType string) {
+	// Only use plain/unencrypted checksums — the encrypted file's Checksum
+	// field does not match content downloaded in plain (decrypted) mode.
 	cs := f.PlainChecksum
 	if cs == "" {
 		cs = f.UnencryptedChecksum
-	}
-	if cs == "" {
-		cs = f.Checksum
 	}
 	if cs == "" {
 		return "", ""

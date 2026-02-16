@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/csv"
 	"encoding/json"
@@ -15,17 +16,20 @@ import (
 
 	"golang.org/x/term"
 
+	"golang.org/x/time/rate"
+
 	"github.com/spf13/cobra"
 
 	"github.com/khan-lab/EGAfetch/internal/api"
 	"github.com/khan-lab/EGAfetch/internal/auth"
+	"github.com/khan-lab/EGAfetch/internal/config"
 	"github.com/khan-lab/EGAfetch/internal/download"
 	"github.com/khan-lab/EGAfetch/internal/state"
 	"github.com/khan-lab/EGAfetch/internal/ui"
 	"github.com/khan-lab/EGAfetch/internal/verify"
 )
 
-var version = "1.0.1"
+var version = "1.1.0"
 
 func main() {
 	rootCmd := &cobra.Command{
@@ -191,24 +195,68 @@ func newDownloadCmd() *cobra.Command {
 	var chunkSize string
 	var configFile string
 	var restart bool
+	var noMetadata bool
+	var metadataFormat string
+	var maxBandwidth string
+	var includePatterns []string
+	var excludePatterns []string
+	var adaptiveChunks bool
 
 	cmd := &cobra.Command{
-		Use:   "download [EGAD.../EGAF...]",
+		Use:   "download [EGAD.../EGAF.../file.txt]",
 		Short: "Download datasets or files from EGA",
-		Long: `Download datasets or files from EGA. Re-running the same command
-automatically resumes incomplete downloads. Use --restart to force a
-fresh download from scratch.`,
+		Long: `Download datasets or files from EGA. Arguments can be dataset IDs
+(EGAD...), file IDs (EGAF...), or text files containing one identifier
+per line (blank lines and #comments are ignored).
+
+Re-running the same command automatically resumes incomplete downloads.
+Use --restart to force a fresh download from scratch.`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// Load persistent config; CLI flags override config values.
+			cfg, err := config.Load()
+			if err != nil {
+				return fmt.Errorf("load config: %w", err)
+			}
+			if !cmd.Flags().Changed("chunk-size") && cfg.ChunkSize != "" {
+				chunkSize = cfg.ChunkSize
+			}
+			if !cmd.Flags().Changed("parallel-files") && cfg.ParallelFiles > 0 {
+				parallelFiles = cfg.ParallelFiles
+			}
+			if !cmd.Flags().Changed("parallel-chunks") && cfg.ParallelChunks > 0 {
+				parallelChunks = cfg.ParallelChunks
+			}
+			if !cmd.Flags().Changed("max-bandwidth") && cfg.MaxBandwidth != "" {
+				maxBandwidth = cfg.MaxBandwidth
+			}
+			if !cmd.Flags().Changed("output") && cfg.OutputDir != "" {
+				output = cfg.OutputDir
+			}
+			if !cmd.Flags().Changed("metadata-format") && cfg.MetadataFormat != "" {
+				metadataFormat = cfg.MetadataFormat
+			}
+
 			chunkBytes, err := parseSize(chunkSize)
 			if err != nil {
 				return fmt.Errorf("invalid chunk-size: %w", err)
 			}
 
+			var limiter *rate.Limiter
+			if maxBandwidth != "" {
+				bwBytes, err := parseSize(maxBandwidth)
+				if err != nil {
+					return fmt.Errorf("invalid max-bandwidth: %w", err)
+				}
+				limiter = rate.NewLimiter(rate.Limit(bwBytes), 256*1024)
+			}
+
 			opts := download.DownloadOptions{
-				ParallelFiles:  parallelFiles,
-				ParallelChunks: parallelChunks,
-				ChunkSize:      chunkBytes,
+				ParallelFiles:    parallelFiles,
+				ParallelChunks:   parallelChunks,
+				ChunkSize:        chunkBytes,
+				Limiter:          limiter,
+				AdaptiveChunking: adaptiveChunks,
 			}
 
 			mgr, err := auth.NewManager()
@@ -238,6 +286,26 @@ fresh download from scratch.`,
 			manifest, err := resolveManifest(ctx, apiClient, args)
 			if err != nil {
 				return err
+			}
+
+			// Apply include/exclude filters.
+			if len(includePatterns) > 0 || len(excludePatterns) > 0 {
+				egafIDs := make(map[string]bool)
+				for _, arg := range args {
+					if strings.HasPrefix(arg, "EGAF") {
+						egafIDs[arg] = true
+					}
+				}
+				beforeCount := len(manifest.Files)
+				if err := filterManifest(manifest, includePatterns, excludePatterns, egafIDs); err != nil {
+					return err
+				}
+				if len(manifest.Files) == 0 {
+					return fmt.Errorf("no files match the given include/exclude patterns (filtered out all %d files)", beforeCount)
+				}
+				if len(manifest.Files) != beforeCount {
+					fmt.Printf("Filtered: %d of %d files match patterns\n", len(manifest.Files), beforeCount)
+				}
 			}
 
 			fmt.Printf("Downloading %d file(s) to %s\n", len(manifest.Files), output)
@@ -270,6 +338,36 @@ fresh download from scratch.`,
 			}
 			tracker.Stop()
 
+			// Fetch dataset metadata if applicable.
+			if !noMetadata && manifest.DatasetID != "" {
+				switch metadataFormat {
+				case "tsv", "csv", "json":
+				default:
+					fmt.Printf("Warning: unsupported metadata format %q, skipping metadata download\n", metadataFormat)
+					goto skipMeta
+				}
+
+				var metaPassword string
+				if configFile != "" {
+					_, metaPassword, _ = loadConfigFile(configFile)
+				}
+
+				if metaPassword == "" {
+					fmt.Println("Warning: metadata download requires password (use --cf for automatic metadata). Skipping metadata.")
+				} else {
+					metaToken, metaErr := mgr.GetMetadataToken(ctx, metaPassword)
+					if metaErr != nil {
+						fmt.Printf("Warning: metadata auth failed (%v). Skipping metadata download.\n", metaErr)
+					} else {
+						metaDir := filepath.Join(output, manifest.DatasetID+"-metadata")
+						if metaErr = fetchAndWriteMetadata(ctx, apiClient, metaToken, manifest.DatasetID, metaDir, metadataFormat); metaErr != nil {
+							fmt.Printf("Warning: metadata download failed (%v). Files were downloaded successfully.\n", metaErr)
+						}
+					}
+				}
+			}
+		skipMeta:
+
 			fmt.Println("\nDownload complete!")
 			return nil
 		},
@@ -282,17 +380,65 @@ fresh download from scratch.`,
 	cmd.Flags().BoolVar(&restart, "restart", false, "Force fresh download, removing any existing progress")
 	cmd.Flags().StringVar(&configFile, "cf", "", "JSON config file with credentials")
 	cmd.Flags().StringVar(&configFile, "config-file", "", "JSON config file with credentials (alias for --cf)")
+	cmd.Flags().BoolVar(&noMetadata, "no-metadata", false, "Skip downloading dataset metadata")
+	cmd.Flags().StringVar(&metadataFormat, "metadata-format", "tsv", "Metadata output format (tsv, csv, json)")
+	cmd.Flags().StringVar(&maxBandwidth, "max-bandwidth", "", "Global bandwidth limit (e.g., 100M, 1G)")
+	cmd.Flags().StringSliceVar(&includePatterns, "include", nil, "Glob patterns to include (matched against file name)")
+	cmd.Flags().StringSliceVar(&excludePatterns, "exclude", nil, "Glob patterns to exclude (matched against file name)")
+	cmd.Flags().BoolVar(&adaptiveChunks, "adaptive-chunks", false, "Auto-adjust chunk size based on throughput")
 
 	return cmd
 }
 
-// resolveManifest takes CLI args (dataset IDs or file IDs) and builds a manifest.
+// expandArgs expands CLI args: EGAD/EGAF identifiers pass through unchanged,
+// anything else is treated as a file containing one identifier per line.
+// Blank lines and lines starting with # are ignored.
+func expandArgs(args []string) ([]string, error) {
+	var expanded []string
+	for _, arg := range args {
+		if strings.HasPrefix(arg, "EGAD") || strings.HasPrefix(arg, "EGAF") {
+			expanded = append(expanded, arg)
+			continue
+		}
+		f, err := os.Open(arg)
+		if err != nil {
+			return nil, fmt.Errorf("cannot open identifier file %q: %w", arg, err)
+		}
+		scanner := bufio.NewScanner(f)
+		lineNum := 0
+		for scanner.Scan() {
+			lineNum++
+			line := strings.TrimSpace(scanner.Text())
+			if line == "" || strings.HasPrefix(line, "#") {
+				continue
+			}
+			if !strings.HasPrefix(line, "EGAD") && !strings.HasPrefix(line, "EGAF") {
+				f.Close()
+				return nil, fmt.Errorf("%s:%d: unrecognized identifier %q (expected EGAD... or EGAF...)", arg, lineNum, line)
+			}
+			expanded = append(expanded, line)
+		}
+		f.Close()
+		if err := scanner.Err(); err != nil {
+			return nil, fmt.Errorf("read identifier file %q: %w", arg, err)
+		}
+	}
+	return expanded, nil
+}
+
+// resolveManifest takes CLI args (dataset IDs, file IDs, or identifier files) and builds a manifest.
 func resolveManifest(ctx context.Context, apiClient *api.Client, args []string) (*state.Manifest, error) {
+	// Expand any file-path args into individual identifiers.
+	ids, err := expandArgs(args)
+	if err != nil {
+		return nil, err
+	}
+
 	manifest := &state.Manifest{
 		CreatedAt: time.Now(),
 	}
 
-	for _, arg := range args {
+	for _, arg := range ids {
 		if strings.HasPrefix(arg, "EGAD") {
 			// Dataset ID — fetch file list.
 			manifest.DatasetID = arg
@@ -304,7 +450,9 @@ func resolveManifest(ctx context.Context, apiClient *api.Client, args []string) 
 			for i := range files {
 				checksum, checksumType := files[i].GetChecksum()
 				// Use EGAF accession ID as directory instead of the API path (EGAZ...).
-				outputName := filepath.Join(files[i].FileID, filepath.Base(files[i].FileName))
+				// Strip .cip extension — EGA serves decrypted content in plain mode.
+				baseName := strings.TrimSuffix(filepath.Base(files[i].FileName), ".cip")
+				outputName := filepath.Join(files[i].FileID, baseName)
 				manifest.Files = append(manifest.Files, state.FileSpec{
 					FileID:       files[i].FileID,
 					FileName:     outputName,
@@ -321,7 +469,9 @@ func resolveManifest(ctx context.Context, apiClient *api.Client, args []string) 
 				return nil, fmt.Errorf("get metadata for %s: %w", arg, err)
 			}
 			checksum, checksumType := meta.GetChecksum()
-			outputName := filepath.Join(meta.FileID, filepath.Base(meta.FileName))
+			// Strip .cip extension — EGA serves decrypted content in plain mode.
+			baseName := strings.TrimSuffix(filepath.Base(meta.FileName), ".cip")
+			outputName := filepath.Join(meta.FileID, baseName)
 			manifest.Files = append(manifest.Files, state.FileSpec{
 				FileID:       meta.FileID,
 				FileName:     outputName,
@@ -539,56 +689,7 @@ func newMetadataCmd() *cobra.Command {
 			}
 
 			apiClient := api.NewClient(mgr)
-
-			fmt.Printf("Fetching metadata for %s...\n", datasetID)
-			meta, err := apiClient.FetchDatasetMappings(ctx, metaToken, datasetID)
-			if err != nil {
-				return err
-			}
-
-			// Create output directory.
-			if err := os.MkdirAll(output, 0755); err != nil {
-				return fmt.Errorf("create output directory: %w", err)
-			}
-
-			// Write individual mapping files.
-			mappings := []struct {
-				name    string
-				records []map[string]interface{}
-			}{
-				{"study_experiment_run_sample", meta.StudyExperimentRunSample},
-				{"run_sample", meta.RunSample},
-				{"study_analysis_sample", meta.StudyAnalysisSample},
-				{"analysis_sample", meta.AnalysisSample},
-				{"sample_file", meta.SampleFile},
-			}
-
-			for _, m := range mappings {
-				ext := format
-				if ext == "tsv" {
-					ext = "tsv"
-				}
-				fileName := m.name + "." + ext
-				outPath := filepath.Join(output, fileName)
-
-				if err := writeRecords(outPath, format, m.records); err != nil {
-					return fmt.Errorf("write %s: %w", fileName, err)
-				}
-				fmt.Printf("  %s (%d records)\n", fileName, len(m.records))
-			}
-
-			// Generate merged metadata file by merging
-			// study_experiment_run_sample + sample_file on sample_accession_id.
-			mergedRecords := buildMergedMetadata(meta)
-			mergedName := datasetID + "_merged_metadata." + format
-			mergedPath := filepath.Join(output, mergedName)
-			if err := writeRecords(mergedPath, format, mergedRecords); err != nil {
-				return fmt.Errorf("write merged file: %w", err)
-			}
-			fmt.Printf("  %s (%d records)\n", mergedName, len(mergedRecords))
-
-			fmt.Printf("\nMetadata saved to %s/\n", output)
-			return nil
+			return fetchAndWriteMetadata(ctx, apiClient, metaToken, datasetID, output, format)
 		},
 	}
 
@@ -750,6 +851,102 @@ func buildMergedMetadata(meta *api.DatasetMetadata) []map[string]interface{} {
 	}
 
 	return result
+}
+
+// buildPEPSampleTable creates PEP-compatible sample records from the merged
+// metadata by renaming sample_accession_id to sample_name (the PEP index column).
+func buildPEPSampleTable(merged []map[string]interface{}) []map[string]interface{} {
+	samples := make([]map[string]interface{}, 0, len(merged))
+	for _, rec := range merged {
+		row := make(map[string]interface{}, len(rec))
+		for k, v := range rec {
+			if k == "sample_accession_id" {
+				row["sample_name"] = v
+			} else {
+				row[k] = v
+			}
+		}
+		samples = append(samples, row)
+	}
+	return samples
+}
+
+// writePEPConfig writes a minimal PEP 2.0.0 project configuration YAML file.
+func writePEPConfig(path, datasetID, sampleTableName string) error {
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = fmt.Fprintf(f, "pep_version: 2.0.0\nsample_table: %s\nname: %s\ndescription: EGA dataset %s metadata\n",
+		sampleTableName, datasetID, datasetID)
+	return err
+}
+
+// fetchAndWriteMetadata fetches dataset metadata from the EGA metadata API and
+// writes mapping files, merged metadata, and PEP files to outputDir.
+func fetchAndWriteMetadata(ctx context.Context, apiClient *api.Client, metaToken, datasetID, outputDir, format string) error {
+	fmt.Printf("Fetching metadata for %s...\n", datasetID)
+	meta, err := apiClient.FetchDatasetMappings(ctx, metaToken, datasetID)
+	if err != nil {
+		return err
+	}
+
+	// Create output directory.
+	if err := os.MkdirAll(outputDir, 0755); err != nil {
+		return fmt.Errorf("create output directory: %w", err)
+	}
+
+	// Write individual mapping files.
+	mappings := []struct {
+		name    string
+		records []map[string]interface{}
+	}{
+		{"study_experiment_run_sample", meta.StudyExperimentRunSample},
+		{"run_sample", meta.RunSample},
+		{"study_analysis_sample", meta.StudyAnalysisSample},
+		{"analysis_sample", meta.AnalysisSample},
+		{"sample_file", meta.SampleFile},
+	}
+
+	for _, m := range mappings {
+		fileName := m.name + "." + format
+		outPath := filepath.Join(outputDir, fileName)
+
+		if err := writeRecords(outPath, format, m.records); err != nil {
+			return fmt.Errorf("write %s: %w", fileName, err)
+		}
+		fmt.Printf("  %s (%d records)\n", fileName, len(m.records))
+	}
+
+	// Generate merged metadata file.
+	mergedRecords := buildMergedMetadata(meta)
+	mergedName := datasetID + "_merged_metadata." + format
+	mergedPath := filepath.Join(outputDir, mergedName)
+	if err := writeRecords(mergedPath, format, mergedRecords); err != nil {
+		return fmt.Errorf("write merged file: %w", err)
+	}
+	fmt.Printf("  %s (%d records)\n", mergedName, len(mergedRecords))
+
+	// Generate PEP (Portable Encapsulated Project) files.
+	pepSamples := buildPEPSampleTable(mergedRecords)
+	pepSampleName := datasetID + "_samples.csv"
+	pepSamplePath := filepath.Join(outputDir, pepSampleName)
+	if err := writeRecords(pepSamplePath, "csv", pepSamples); err != nil {
+		return fmt.Errorf("write PEP sample table: %w", err)
+	}
+	fmt.Printf("  %s (%d samples)\n", pepSampleName, len(pepSamples))
+
+	pepConfigName := datasetID + "_pep.yaml"
+	pepConfigPath := filepath.Join(outputDir, pepConfigName)
+	if err := writePEPConfig(pepConfigPath, datasetID, pepSampleName); err != nil {
+		return fmt.Errorf("write PEP config: %w", err)
+	}
+	fmt.Printf("  %s\n", pepConfigName)
+
+	fmt.Printf("\nMetadata saved to %s/\n", outputDir)
+	return nil
 }
 
 // --- Status command ---
@@ -930,6 +1127,60 @@ func ensureAuth(ctx context.Context, mgr *auth.Manager, configFile string) error
 }
 
 // --- Helpers ---
+
+// filterManifest filters the manifest's file list using include/exclude glob patterns.
+// Includes are applied first (file must match at least one), then excludes.
+// Files in skipFileIDs are never filtered out (explicit EGAF args).
+func filterManifest(manifest *state.Manifest, includes, excludes []string, skipFileIDs map[string]bool) error {
+	var filtered []state.FileSpec
+	for _, f := range manifest.Files {
+		if skipFileIDs[f.FileID] {
+			filtered = append(filtered, f)
+			continue
+		}
+
+		baseName := filepath.Base(f.FileName)
+
+		// Include filter: file must match at least one pattern.
+		if len(includes) > 0 {
+			matched := false
+			for _, pattern := range includes {
+				ok, err := filepath.Match(pattern, baseName)
+				if err != nil {
+					return fmt.Errorf("invalid include pattern %q: %w", pattern, err)
+				}
+				if ok {
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				continue
+			}
+		}
+
+		// Exclude filter: file excluded if it matches any pattern.
+		excluded := false
+		for _, pattern := range excludes {
+			ok, err := filepath.Match(pattern, baseName)
+			if err != nil {
+				return fmt.Errorf("invalid exclude pattern %q: %w", pattern, err)
+			}
+			if ok {
+				excluded = true
+				break
+			}
+		}
+		if excluded {
+			continue
+		}
+
+		filtered = append(filtered, f)
+	}
+
+	manifest.Files = filtered
+	return nil
+}
 
 // parseSize parses a human-readable size string (e.g., "64M", "1G") to bytes.
 func parseSize(s string) (int64, error) {
