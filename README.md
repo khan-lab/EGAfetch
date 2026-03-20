@@ -300,22 +300,3 @@ After all chunks complete, they are merged into the final file and verified agai
 ```
 
 The `.egafetch/` directory is removed by `egafetch clean` after downloads complete.
-
-## Comparison with pyEGA3
-
-| | pyEGA3 | EGAfetch |
-|---|--------|----------|
-| Language | Python | Go (single binary) |
-| Parallel files | 1 | Configurable (default 4) |
-| Parallel chunks | 1 | Configurable (default 8) |
-| Resume | Limited | Full (chunk-level, byte-precise) |
-| Token refresh | Manual | Automatic |
-| Bandwidth throttling | No | `--max-bandwidth` flag |
-| File filtering | No | `--include`/`--exclude` glob patterns |
-| Adaptive chunk sizing | No | `--adaptive-chunks` auto-tunes |
-| Persistent config | No | `~/.egafetch/config.yaml` |
-| Config file | `-cf credentials.json` | `--cf credentials.json` (compatible format) |
-| Installation | pip install | Single binary, zero dependencies |
-| Metadata export | No | TSV/CSV/JSON with master file (auto during download) |
-
-
