@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Khan"
+  given-names: "Aziz"
+  orcid: "https://orcid.org/0000-0002-6459-6224"
+title: " EGAfetch: a fast, resumable tool for efficient download of data and metadata from EGA"
+version: 1.1.0
+doi: 10.5281/zenodo.19136319
+date-released: 2026-02-18
+url: "https://github.com/khan-lab/EGAfetch"
