@@ -47,7 +47,7 @@ if [[ ! -x "$EGAFETCH_BIN" ]]; then
 fi
 
 PYega3_BIN="${PYega3_BIN:-pyega3}"
-RUNS="${RUNS:-4}"
+RUNS="${RUNS:-3}"
 SHUFFLE_ORDER="${SHUFFLE_ORDER:-1}"
 KEEP_DIRS="${KEEP_DIRS:-0}"
 
