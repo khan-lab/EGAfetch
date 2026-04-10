@@ -2,7 +2,7 @@
 
 > **Fast, parallel, resumable data/metadata downloads from the [European Genome-phenome Archive (EGA)](https://ega-archive.org/)**.
 
-EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/EGA-archive/ega-download-client) with ~8x faster downloads, automatic resume, and robust error handling.
+EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/EGA-archive/ega-download-client) with super-fast downloads, automatic resume, and robust error handling.
 
 ## Features
 
