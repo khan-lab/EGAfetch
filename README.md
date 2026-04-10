@@ -300,3 +300,7 @@ After all chunks complete, they are merged into the final file and verified agai
 ```
 
 The `.egafetch/` directory is removed by `egafetch clean` after downloads complete.
+
+## Cite EGAfetch
+
+> Aziz Khan. (2026). EGAfetch: a fast, parallel, and resumable command-line client for the European Genome-phenome Archive (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.19136319
