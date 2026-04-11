@@ -4,7 +4,7 @@ authors:
 - family-names: "Khan"
   given-names: "Aziz"
   orcid: "https://orcid.org/0000-0002-6459-6224"
-title: " EGAfetch: a fast, resumable tool for efficient download of data and metadata from EGA"
+title: "EGAfetch: an ultra-fast download client for the European Genome-phenome Archive"
 version: 1.1.0
 doi: 10.5281/zenodo.19136319
 date-released: 2026-02-18

@@ -1,6 +1,6 @@
 # EGAfetch
 
-> **Fast, parallel, resumable data/metadata downloads from the [European Genome-phenome Archive (EGA)](https://ega-archive.org/)**.
+> **An ultra-fast, parallel, resumable data/metadata downloads from the [European Genome-phenome Archive (EGA)](https://ega-archive.org/)**.
 
 EGAfetch is a single-binary CLI tool alternative to [pyEGA3](https://github.com/EGA-archive/ega-download-client) with super-fast downloads, automatic resume, and robust error handling.
 
@@ -303,4 +303,4 @@ The `.egafetch/` directory is removed by `egafetch clean` after downloads comple
 
 ## Cite EGAfetch
 
-> Aziz Khan. (2026). EGAfetch: a fast, parallel, and resumable command-line client for the European Genome-phenome Archive (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.19136319
+> Aziz Khan. (2026). EGAfetch: an ultra-fast download client for the European Genome-phenome Archive (v1.1.0). Zenodo. https://doi.org/10.5281/zenodo.19136319
